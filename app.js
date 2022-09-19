@@ -1,177 +1,243 @@
-const w = () => {
-    if (enemies[5].hull <= 0) { // Checks if NO(!) enemies are returning isLiving === true
-        setTimeout(() => {alert("All enemies have been DEFEATED! You win!")}, '700');
-        console.log("All enemies have been DEFEATED! You win!");
+//Declared variables for stats and images
+let stats = document.querySelector('.playerStats');
+let enemyStats = document.querySelector('.enemyStats');
+let playerImg = document.querySelector('.playerImage');
+let enemyImg = document.querySelector('.enemyImage');
+
+//Ship class that creates new ships for Player and Enemies
+
+class Ship {
+    constructor (hull, firepower, accuracy){
+        this.hull = hull;
+        this.firepower = firepower;
+        this.accuracy = accuracy;
     }
 }
 
-const l = player1 => {
-    if (player1.hull <= 0) {
-        player1.isLiving = false;
-        setTimeout(() => {alert(player1.name + ' is dead! You lose!')}, '700');
-        console.log(player1.name + ' is dead! You lose!');
-    } 
+// Initializing an instance for Spaceship
+let spaceship = new Ship (20, 5, .7);
+
+let spaceShipName = document.querySelector('#player1Name').innerHTML = "USS HelloWorld";
+
+
+//Function creates a random number of enemies with random stats
+
+function genereateEnemy(number){
+    while (number > 0){
+        const enemyShip = new Ship (integer(3, 6), integer(2, 4), decimal());
+        enemies.unshift(enemyShip);
+        number--;
+    }
 }
 
-// playerStats and enemyStats are pulled from index.html to use for updating stats as game progresses.
-let playerStats = document.querySelector(".playerStats");
-let enemyStats = document.querySelector(".enemyStats");
-let enemyName = document.querySelector(".mainCharacterView right.namebox")
+//Creating an array to push enemies into when calling generate enemy function and creating a copy of the array to be able to receive halfNumOfEnemies of the length of the array
 
-// Setup Player class
-class Player {
-    constructor() {
-        this.name = "USS HelloWorld";
-        this.hull = 20;
-        this.accuracy = 0.7;
-        this.firepower = 5;
-        this.isLiving = true;
-    }
-    attackEnemy(enemy) { // Player method for attacking the enemy
-        if (Math.random() <= this.accuracy) {
-            setTimeout(() => {alert('You hit the enemy!')}, '700');
-                console.log('You hit the enemy!');
-                enemy.hull = enemy.hull - this.firepower;
+let enemies = [];
+genereateEnemy(integer(4, 8));
 
-                updateAlien();
+//Grabbing the values for the upgrade feature
 
-                    if (enemy.hull <= 0) {
+let totalEnemies = [...enemies];
+let halfNumOfEnemies = Math.floor(totalEnemies.length/2);
 
-                        enemy.isLiving = false;
-                        setTimeout(() => {alert(enemy.name + ' is dead!')}, '700');
-                        console.log(enemy.name + ' is dead!');
-                    } 
-            } else {
-                setTimeout(() => {alert('You missed ' + enemy.name + '!')}, '700');
-                console.log('You missed ' + enemy.name + '!');
-            }
-            
-        }
-    }
+//enemyUpdate function to update the html to the correct enemy we are facing before the page loads
 
-// Setup the Enemy Class
-class Enemy {
-    constructor(name) {
-        this.name = name;
-        this.hull = Math.floor(Math.random() * 4) + 3;
-        this.firepower = Math.floor(Math.random() * 3) + 2;
-        this.accuracy = (Math.floor(Math.random() * 3) + 6) / 10;
-        this.isLiving = true;
-    }
-    attackPlayer(player) { // Enemy method for attacking the player
-            if (Math.random() <= this.accuracy) {
+enemyUpdate(enemies[0]);
 
-                setTimeout(() => {alert(this.name + " hit you!")}, '700');
-                console.log(this.name + " hit you!");
-                player.hull = player.hull - this.firepower;
-
-                updatePlayer();
-
-                // if (player.hull <= 0) {
-
-                //     player.isLiving = false;
-                //     alert(player.name + ' is dead! You lose!');
-                //     console.log(player.name + ' is dead! You lose!');
-                // } 
-
-            } else {
-                setTimeout(() => {alert(this.name + ' missed!')}, '700');
-                console.log(this.name + ' missed!');
-
-            }
-            
-        }
-    }
-
-// Initialize instance for single player
-let player1 = new Player();
-
-// Initialize instances for enemy ships
-let enemy1 = new Enemy("Enemy 1");
-let enemy2 = new Enemy("Enemy 2");
-let enemy3 = new Enemy("Enemy 3");
-let enemy4 = new Enemy("Enemy 4");
-let enemy5 = new Enemy("Enemy 5");
-let enemy6 = new Enemy("Enemy 6");
-
-// Establish enemy ship array 
-let enemies = [enemy1, enemy2, enemy3, enemy4, enemy5, enemy6];
-// console.log(enemies) //Log enemies array to display data
-
-// Log each enemy to observe if data is better randomized
-// console.log(enemy1);
-// console.log(enemy2);
-// console.log(enemy3);
-// console.log(enemy4);
-// console.log(enemy5);
-// console.log(enemy6);
-
-// Testing the Player attack method
-// player1.attackEnemy(enemy1);
-
-// Testing the Enemy attack method
-// enemy1.attackPlayer(player1);
-
-//Declare variables, mainPlayer & enemy for use in startBattle function
-let mainPlayer;
-let enemy;
-
-// Established function to initiate and control the flow of the battle. 
-// While (living) continue to fight Unless "no" is entered into the prompt
-function startBattle(player, enemies) {
-    mainPlayer = player; // Set value of mainPlayer variable to player parameter
-
-    while (player.isLiving) { // Checking if/while Player is living...
-        enemy = enemies.find((enemy) => enemy.isLiving); // Searching through array of enimies for enemies that still return true for "isLiving"
-
-        // if (enemies[5].hull <= 0) { // Checks if NO(!) enemies are returning isLiving === true
-        //     alert("All enemies have been DEFEATED! You win!");
-        //     console.log("All enemies have been DEFEATED! You win!");
-        //     break;
-        // }
-
-        setTimeout(() => {alert(`You are battling ${enemy.name}!`)}, '700');
-        console.log(`You are battling ${enemy.name}!`);
-        player1.attackEnemy(enemy); // Player attacks Enemy
-        updateAlien();
-
-        if (enemy.isLiving === 'true') { // Checks if/while enemy is living...
-            enemy.attackPlayer(player); // Continue the attack on the Player
-            updatePlayer();
-        } else {
-            // Declaring "retreat" variable and settings it's value to a prompt message
-            let newEnemy = enemies.find((enemy) => enemy.isAlive); // Searching array of enimies for enemies that still return true for "isAlive"
-            if (newEnemy) {
-              let retreat = prompt(
-                `${enemy.name} is dead, would you like to retreat? (Yes or No)`
-              );
-      
-              if (retreat.toLowerCase() === "yes") {
-                // Condition that sets when game is over if "yes" is entered into the promot. Otherwise, battle continues.
-                setTimeout(() => {alert("GAME OVER!")}, '700');
-                console.log("GAME OVER!");
-                break; // Ends game
-                }
-
-            }
-        }
-    }
-
-}
-
-
-// Functions used to update stats
-function updatePlayer() {
-    playerStats.innerHTML = `Hull: ${player1.hull} <br> Firepower: ${player1.firepower} <br> Accuracy: ${player1.accuracy}`;
-}
-function updateAlien() {
-
-    enemyStats.innerHTML = `Hull: ${enemies[0].hull} <br> Firepower: ${enemies[0].firepower} <br> Accuracy: ${enemies[0].accuracy}`;
-}
+// Initial prompt when starting game for the first time
 
 setTimeout(() => {
-    let startMessage = window.confirm("Welcome to Space Battle!");
+    let startMessage = window.confirm("Welcome to Space battleStart!");
     if (startMessage) {
-        startBattle(player1, enemies);
+        startGame();
     }
-  }, 3000); // 3 second delay before the battle starts.
+  }, 3000)
+
+// Function that will start the game and give dialouge to the player
+
+function startGame () {
+
+    alert("The fate of the Earth is in your hands...");
+    enemyImg.style.backgroundImage = "url('/images/enemy.gif')";
+
+// Starts battleStart flow of events
+
+    setTimeout(() => {
+        if (confirm('Do you want to attack?')) {
+            battleStart(enemies); 
+
+// Else player chooses not to enter the battle.
+        }else {
+            alert('So much for being Earths only defense!?...');
+            alert(`The abandoned the battle!`);
+            replay();
+        }   
+    }, '500');
+}
+
+// BattleStart function set to enemies 0 due to our use of shift and unshift
+
+function battleStart(enemies) {
+    ourAttack(enemies[0]);
+}
+
+//Function to for situations that could happen after the initial run of the battleStart function
+
+function newBattle () {
+
+    //Creating an upgrade
+
+    if (enemies.length === halfNumOfEnemies){
+        setTimeout(() => {
+        alert("Captain: The aliens seem to be planning a large attack, we have time to install an upgrade to the ship while they plan... but we only have time for one... Its up to you soldier will you recharge your shields or upgrade your firepower?")
+            if (confirm('Hit OK to return to 20 HP, and CANCEL to increase your FIREPOWER by 2')){
+                spaceship.hull = 20;
+                updateStats();
+            } else {
+                spaceship.firepower = 7;
+                updateStats();
+            }   
+        }, '500')
+        
+        setTimeout(() => {
+            alert(`The ${spaceShipName} has been repaired. Please, return to the battle!`);
+        }, '700');
+    }
+
+// Checks if enemies are still alive. If so, continue or retreat.
+
+    if (enemies.length != 0) {
+        enemyUpdate(enemies[0]);
+        setTimeout(() => {
+            if (confirm(`The fight is not over yet! There are still ${enemies.length} enemies remaining. Will the ${spaceShipName} continue with attacking or retreat?`)) {
+            enemyImg.style.backgroundImage ="url('/images/enemy.gif')";
+                setTimeout(() => {
+                    alert(`Let's continue our assualt`);
+                    battleStart(enemies) //Beginning the battleStart sequence again on new enemy0
+                }, '500');
+            } else {
+                alert(`The decided to retreat.. and have doomed Earth to fight without you...`);
+                alert(`The ${spaceShipName} Loses!`);
+                replay();
+            }
+        }, '800')
+    } else {
+        enemyImg.style.backgroundImage ='';
+        setTimeout(() => {
+        alert("No more enemies remain!");
+        alert(`The ${spaceShipName} has defeated all the space invdaders and will return to Earth as a hero!`);
+        alert(`The ${spaceShipName} Wins!`);
+        replay();
+        }, '500');
+    }
+}
+
+// Player's attack function
+
+function ourAttack (invader) {
+    if(Math.random() < spaceship.accuracy){
+        invader.hull -= spaceship.firepower;
+        enemyUpdate(invader); 
+// Checks if the enemy is defeated with the attack        
+        if (invader.hull <= 0) {
+            invader.hull = 0;
+            enemyUpdate(invader);
+            enemyImg.classList.add('shake');
+                setTimeout(() => {
+                    alert(`Direct hit. ${spaceShipName} dealt ${spaceship.firepower} damage. The ${spaceShipName} has destroyed the enemy!`)
+                        enemies.shift();
+                        enemyImg.style.backgroundImage ='';
+                        newBattle();
+                }, '800');
+            setTimeout(() => enemyImg.classList.remove('shake'), '750');
+        }  else {
+
+// Checks, if the enemy survives the attack
+            enemyImg.classList.add('shake');
+                setTimeout (() => {
+                    alert(`Direct hit, the ${spaceShipName} has dealt ${spaceship.firepower} damage!`);
+                    enemyAttack(invader);
+            }, '800')
+            setTimeout(() => enemyImg.classList.remove('shake'), '750');
+        }
+
+//Missed attack is handled here.
+} else {
+        setTimeout (() => {
+            alert(`The ${spaceShipName} missed!`);
+            enemyAttack(invader);
+        }, '800');
+    }
+}
+
+// Enemy's attack function
+function enemyAttack (invader) {
+    if (Math.random() < invader.accuracy) {
+        spaceship.hull -= invader.firepower;
+        updateStats();
+//code for if enemy defeats the player
+        if (spaceship.hull <= 0) {
+            spaceship.hull = 0;
+            updateStats();
+            playerImg.classList.add('shake')
+            setTimeout(() => {
+                alert(`Direct hit, enemy dealt ${invader.firepower} damage to the ${spaceShipName}'s shields!`);
+                alert(`The ${spaceShipName}'s shields are fully depleted..`);
+                alert(`The ${spaceShipName} Loses!`);
+                replay();
+            }, '800')
+            setTimeout(() => playerImg.classList.remove('shake'), '750');
+//code for if player survives hit
+            }else {
+                playerImg.classList.add('shake');
+                setTimeout (() => {
+                    alert(`Direct hit, enemy dealt ${invader.firepower} damage to the ${spaceShipName}'s shields!`);
+                    ourAttack(invader);
+                }, '800')
+        setTimeout(() => playerImg.classList.remove('shake'), '750');
+            }
+// Else for if enemy misses
+    } else {
+        setTimeout (() => {
+            alert('Enemy missed!');
+            ourAttack(invader);
+        }, '800');
+    }
+}
+
+// Function to update enemy stats
+
+function enemyUpdate (invader) {
+    enemyStats.innerHTML = `Hull: ${invader.hull}<br> Firepower: ${invader.firepower}<br> Accuracy: ${Math.round(10*invader.accuracy)/10}<br>`;
+}
+
+// Function to update player stats
+
+function updateStats () {
+    stats.innerHTML = `Hull: ${spaceship.hull}<br> Firepower: ${spaceship.firepower}<br> Accuracy: ${spaceship.accuracy}<br>`
+}
+
+//Random integer generated for health and firepower properties
+
+function integer(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+//Random decimal for firepower
+
+function decimal() {
+    return Math.random() * (.8 - .6) + .6;
+}
+
+// Replay function that checks when the player wins or loses and wants to play again.
+
+function replay() {
+    if (confirm('Would you like to try to defend earth again?')){
+        location.reload()
+    } else {
+        alert('Thanks for playing we hope you enjoyed! Your window will now close.')
+        window.close() 
+    }
+}
