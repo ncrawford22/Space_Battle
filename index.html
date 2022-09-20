@@ -12,36 +12,33 @@
 </head>
 <body>
     <div class="bodyContainer">
-
-        <div class="mainCharacterView left">
-                <div class="nameBox" id="player1Name">USS HelloWorld</div>
+        <div class="mainCharacterView left" >
+                <div class="nameBox">USS HelloWorld</div>
                 <div class="playerImage"></div>
-                <div class="playerStats">
-
-                Hull : 20 <br>
-                FirePower : 5 <br>
-                Accuracy : .7 <br>
-
+                <div class="playerStats" id="playerStats">
+                    Hull : - <br>
+                    FirePower : - <br>
+                    Accuracy : - <br>
                 </div>
-
         </div>
 
 
         <div class="mainCharacterView right">
-           
-            <div class="nameBox" id="player2Name">Enemy</div>
+            <div class="nameBox">Enemy</div>
             <div class="enemyImage"></div>
-                <div class="enemyStats">
-                    Hull : 6 <br>
-                    FirePower : 3 <br>
-                    Accuracy : .6 <br>
-    
-    
-                </div>
-            
+            <div class="enemyStats" id="enemyStats">
+                Hull : 6 <br>
+                FirePower : 3 <br>
+                Accuracy : .6 <br>
+            </div>
         </div>
+    </div>
 
+    <div class="lowerMenu">
+        <button class="button" id="start">Start Game</button>
+        <button class="button" id="reset">Reset</button>
+    </div>
 
-    <script src="app.js"></script>
+    <script  src="script.js" defer ></script>
 </body>
 </html>
